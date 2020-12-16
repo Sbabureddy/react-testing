@@ -24,5 +24,5 @@ yarn-error.log*
 
 .eslintcache
 
-
-actions-runner/**
+# github actions
+/actions-runner/**
