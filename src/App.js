@@ -1,8 +1,16 @@
+
 import './App.css';
 import Hello from './components/Hello';
 import ApiCall from './components/ApiCall';
+import Toggle from './components/Toggle';
+import { useState } from 'react';
 
 function App() {
+  const [state, setState] = useState(false)
+  const onChange = (state) => {
+    setState(state => !state)
+  }
+  
   return (
     <div className="App">
       <a
@@ -15,6 +23,7 @@ function App() {
         </a>
      <Hello name="React"/>
      <ApiCall id="1" />
+     <Toggle onChange={onChange} />
     </div>
   );
 }
