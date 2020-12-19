@@ -38,7 +38,7 @@ function App() {
           Learn React
         </a>
      <Hello name="React"/>
-     <ApiCall id="1" />
+     <ApiCall  />
      <Toggle onChange={onChange} />
      <br />
      <Card onSelect={onSelect} />

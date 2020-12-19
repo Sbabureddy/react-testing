@@ -1,29 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 function ApiCall(props) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState([]);
 
-  const fetchUser = async (id) => {
-    const response = await fetch(
-      "https://jsonplaceholder.typicode.com/users/" + id
-    );
+  const fetchUser = async () => {
+    const response = await fetch("https://jsonplaceholder.typicode.com/users/");
     setUser(await response.json());
   };
 
   useEffect(() => {
-    fetchUser(props.id);
-  }, [props.id]);
+    fetchUser();
+  }, []);
 
   if (!user) {
     return "loading...";
   }
   return (
-    <details>
-      <summary>{user.name}</summary>
-      <strong>{user.email}</strong>
-      <br />
-      lives in {user.address.street}
-    </details>
+    <Fragment>
+      {user.map((info) => {
+        return (
+          <details key={info.id}>
+            <summary>{info.name}</summary>
+            <strong>{info.email}</strong>
+            <br />
+            lives in {info.address.street}
+          </details>
+        );
+      })}
+    </Fragment>
   );
 }
 
