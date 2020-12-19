@@ -1,8 +1,8 @@
 import React from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-import Card from "../components/Card";
 
+import Card from "../components/Card";
 
 jest.useFakeTimers();
 
@@ -20,56 +20,58 @@ afterEach(() => {
   container = null;
 });
 
-it("should select null after timing out", () => {
-  const onSelect = jest.fn();
-  act(() => {
-    render(<Card onSelect={onSelect} />, container);
+describe("<Card />", () => {
+  it("should select null after timing out", () => {
+    const onSelect = jest.fn();
+    act(() => {
+      render(<Card onSelect={onSelect} />, container);
+    });
+
+    // move ahead in time by 100ms
+    act(() => {
+      jest.advanceTimersByTime(100);
+    });
+    expect(onSelect).not.toHaveBeenCalled();
+
+    // and then move ahead by 5 seconds
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+    expect(onSelect).toHaveBeenCalledTimes(0);
   });
 
-  // move ahead in time by 100ms
-  act(() => {
-    jest.advanceTimersByTime(100);
-  });
-  expect(onSelect).not.toHaveBeenCalled();
+  it("should cleanup on being removed", () => {
+    const onSelect = jest.fn();
+    act(() => {
+      render(<Card onSelect={onSelect} />, container);
+    });
+    act(() => {
+      jest.advanceTimersByTime(100);
+    });
+    expect(onSelect).not.toHaveBeenCalled();
 
-  // and then move ahead by 5 seconds
-//   act(() => {
-//     jest.advanceTimersByTime(5000);
-//   });
-//   expect(onSelect).toHaveReturnedWith(null);
-});
-
-it("should cleanup on being removed", () => {
-  const onSelect = jest.fn();
-  act(() => {
-    render(<Card onSelect={onSelect} />, container);
-  });
-  act(() => {
-    jest.advanceTimersByTime(100);
-  });
-  expect(onSelect).not.toHaveBeenCalled();
-
-  // unmount the app
-  act(() => {
-    render(null, container);
-  });
-  act(() => {
-    jest.advanceTimersByTime(5000);
-  });
-  expect(onSelect).not.toHaveBeenCalled();
-});
-
-it("should accept selections", () => {
-  const onSelect = jest.fn();
-  act(() => {
-    render(<Card onSelect={onSelect} />, container);
+    // unmount the app
+    act(() => {
+      render(null, container);
+    });
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+    expect(onSelect).not.toHaveBeenCalled();
   });
 
-  act(() => {
-    container
-      .querySelector("[data-testid='2']")
-      .dispatchEvent(new MouseEvent("click", { bubbles: true }));
-  });
+  it("should accept selections", () => {
+    const onSelect = jest.fn();
+    act(() => {
+      render(<Card onSelect={onSelect} />, container);
+    });
 
-  expect(onSelect).toHaveBeenCalledWith(2);
+    act(() => {
+      container
+        .querySelector("[data-testid='2']")
+        .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(onSelect).toHaveBeenCalledWith(2);
+  });
 });

@@ -8,7 +8,9 @@ export default function Card(props) {
     return () => {
       clearTimeout(timeoutID);
     };
-  }, [props, props.onSelect]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.onSelect]);
 
   return [1, 2, 3, 4].map((choice) => (
     <button

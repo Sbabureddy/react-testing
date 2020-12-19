@@ -4,8 +4,12 @@ function ApiCall(props) {
   const [user, setUser] = useState([]);
 
   const fetchUser = async () => {
-    const response = await fetch("https://jsonplaceholder.typicode.com/users/");
-    setUser(await response.json());
+    fetch("https://jsonplaceholder.typicode.com/users/")
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -19,7 +23,7 @@ function ApiCall(props) {
     <Fragment>
       {user.map((info) => {
         return (
-          <details key={info.id}>
+          <details key={String(info.id)}>
             <summary>{info.name}</summary>
             <strong>{info.email}</strong>
             <br />
